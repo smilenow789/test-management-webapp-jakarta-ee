@@ -68,14 +68,45 @@ angemeldete Person wird in einer sitzungsbezogenen Bean gehalten.
 
 ## Starten mit Docker
 
+Voraussetzung: [Docker Desktop](https://www.docker.com/products/docker-desktop) ist installiert und läuft.
+
+**1. Projekt herunterladen**
+
 ```bash
-cp .env.example .env      # Werte anpassen
+git clone https://github.com/smilenow789/test-management-webapp-jakarta-ee.git
+cd test-management-webapp-jakarta-ee
+```
+
+**2. Einstellungen anlegen:** Die Datei `.env.example` unter dem Namen `.env` kopieren.
+
+```bash
+# Windows (PowerShell)
+copy .env.example .env
+
+# macOS / Linux
+cp .env.example .env
+```
+
+Danach die Datei `.env` in einem Texteditor öffnen und die drei Passwörter durch eigene ersetzen
+(`MYSQL_ROOT_PASSWORD`, `DB_PASSWORD`, `APP_SEED_PASSWORD`). Die Werte sind frei wählbar. Alle
+anderen Zeilen bleiben unverändert.
+
+**3. Starten**
+
+```bash
 docker compose up --build
 ```
 
-Danach: <http://localhost:8080/login.xhtml>. Beim ersten Start werden in der leeren Datenbank
-sieben Demo-Benutzer angelegt (`Admin`, `NameTestmanager`, `Nametester`, …). Ihr gemeinsames
-Passwort ist der Wert von `APP_SEED_PASSWORD` aus `.env`.
+Der erste Start dauert einige Minuten, weil die Anwendung gebaut wird. Sobald das Terminal
+ruhig bleibt, ist die Anwendung bereit.
+
+**4. Anmelden:** Im Browser <http://localhost:8080/login.xhtml> öffnen. Als Benutzername zum
+Beispiel `Admin` eingeben. Das Passwort ist der Wert von `APP_SEED_PASSWORD` aus der Datei `.env`.
+Weitere Demo-Benutzer sind `NameTestmanager` und `Nametester` (insgesamt sieben, alle mit dem
+gleichen Passwort).
+
+**Beenden:** `Strg + C` im Terminal, danach `docker compose down`.
+Mit `docker compose down -v` werden zusätzlich alle gespeicherten Daten gelöscht.
 
 
 ## Projektstruktur
