@@ -1,34 +1,56 @@
-# Testmanagement-Webanwendung für Anforderungen, Testfälle und Testläufe (Jakarta EE)
+# Testmanagement-Webanwendung für manuelle Anwendertests (Jakarta EE)
 
-Mehrbenutzer-Webanwendung zur Verwaltung von **Anforderungen, Testfällen und Testläufen**.
-Jede Rolle sieht nur ihre eigene Oberfläche: Anforderungen erfassen, Testfälle ableiten,
-Testläufe zusammenstellen und Testern zuweisen, Ergebnisse eintragen.
+Mehrbenutzer-Webanwendung zur Organisation manueller Anwendertests: Anforderungen erfassen,
+Testfälle daraus ableiten, Testläufe zusammenstellen, Tester zuweisen und Ergebnisse festhalten.
+Jede Benutzerrolle sieht ihre eigene Oberfläche.
 
-Entstanden als Studienprojekt (Java EE / CDI, 3. Semester, Arbeitstitel *Require4Testing*), danach
-um Konfiguration per Umgebungsvariablen und Docker ergänzt.
+Entstanden im Studium (Softwareentwicklung, Programmierung von industriellen
+Informationssystemen mit Java EE) als Prototyp für das fiktive Startup-Projekt *Require4Testing*.
+Der Prototyp deckt die fünf höchstpriorisierten User Stories vollständig ab und wurde danach um
+Konfiguration per Umgebungsvariablen und Docker ergänzt.
+
+## Funktionen und Rollen
+
+| Rolle | Aufgabe | Seite |
+|---|---|---|
+| Requirements Engineer | Anforderungen mit Titel und Beschreibung anlegen | `requirementsengineer.xhtml` |
+| Testfallersteller | Testfälle zu einer Anforderung erstellen | `testfallersteller.xhtml` |
+| Testmanager | Testfälle zu Testläufen bündeln und Tester zuweisen | `testmanager.xhtml` |
+| Tester | zugewiesene Testfälle ausführen und das Ergebnis speichern | `tester.xhtml` |
+
+Nach dem Login wird je nach Rolle auf die passende Seite weitergeleitet, jede Seite hat einen
+Logout.
+
+## Umgesetzte User Stories
+
+Priorisiert nach der MoSCoW-Methode:
+
+| Priorität | User Story |
+|---|---|
+| Must | Der Requirements Engineer erstellt zu testende Anforderungen. |
+| Must | Der Testmanager legt Testläufe an. |
+| Must | Der Testfallersteller erstellt zu einer Anforderung Testfälle. |
+| Should | Der Testmanager ordnet einem Testlauf verschiedene Testfälle und einen Tester zu. |
+| Should | Der Tester versieht ihm zugeordnete Testfälle mit einem Ergebnis. |
 
 ## Technik
 
 | Schicht | Technologie |
 |---|---|
 | Präsentation | JSF (Mojarra), PrimeFaces, XHTML |
-| Logik | CDI (Weld), Controller → Service → Repository |
-| Persistenz | JPA / Hibernate, **MySQL 8** |
+| Logik | CDI (Weld), Schichten Controller, Service, Repository |
+| Persistenz | JPA mit Hibernate, MySQL 8 |
 | Laufzeit | Tomcat 10.1, Java 17 |
-| Build / Betrieb | Maven, Docker Compose |
+| Build und Betrieb | Maven, Docker Compose |
 
-## Rollen
+## Architektur und Entwurf
 
-| Rolle | Aufgabe |
-|---|---|
-| Requirements Engineer | Anforderungen anlegen |
-| Testfallersteller | Testfälle zu einer Anforderung erstellen |
-| Testmanager | Testfälle zu Testläufen bündeln, Tester zuweisen |
-| Tester | zugewiesene Testfälle ausführen, Ergebnis speichern |
+Die Anwendung ist als Schichtenarchitektur aufgebaut: JSF-Seiten sprechen **Controller** (Backing
+Beans) an, diese nutzen **Services** mit der Geschäftslogik, die über **Repositories** per JPA auf
+die Datenbank zugreifen. Die Verbindung der Schichten übernimmt CDI per Dependency Injection. Die
+angemeldete Person wird in einer sitzungsbezogenen Bean gehalten.
 
-## Entwurf und Datenmodell
-
-**Schichten und Klassen** (Model, Controller, Service, Repository, Util):
+**Klassendiagramm** (Model, Controller, Service, Repository, Util):
 
 ![Klassendiagramm](docs/klassendiagramm.png)
 
@@ -79,3 +101,10 @@ src/main/java/
   util/         EntityManager-Producer, Session-Bean
 src/main/webapp/  XHTML-Seiten, CSS
 ```
+
+## Ausblick
+
+- Pro Zuweisung eine eigene Testfall-Instanz, damit Ergebnisse verschiedener Testläufe
+  unabhängig voneinander bleiben
+- Gemeinsame Bestandteile der Seiten (zum Beispiel der Logout-Button) in Templates auslagern
+- Registrierung neuer Benutzer und Passwortänderung
