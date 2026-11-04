@@ -9,7 +9,7 @@
   <packaging>war</packaging>
 
   <name>Fallstudie_IU Maven Webapp</name>
-  <url>https://github.com/smilenow789/require4testing-jakarta-ee</url>
+  <url>https://github.com/smilenow789/test-management-webapp-jakarta-ee</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
