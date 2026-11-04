@@ -29,18 +29,23 @@ Konfiguration per Umgebungsvariablen, Docker und CI ergänzt.
 Der Zugriff auf die Seiten wird über einen Servlet-Filter (`AuthenticationFilterController`)
 geschützt; ohne Login wird auf `login.xhtml` umgeleitet.
 
-## Datenmodell
+## Entwurf und Datenmodell
 
-```mermaid
-erDiagram
-    ANFORDERUNG ||--o{ TESTFALL : "wird erfüllt durch"
-    TESTFALL }o--o{ BENUTZER : "zugewiesen an"
-    TESTLAUF }o--o{ TESTFALL : "enthält"
-    ANFORDERUNG { int ID string anforderungstitel string beschreibung }
-    TESTFALL { int ID string testfallTitel string beschreibung string ergebnis }
-    TESTLAUF { int ID string testlaufTitel string beschreibung }
-    BENUTZER { int ID string name string passwort string rolle }
-```
+**Schichten und Klassen** (Model, Controller, Service, Repository, Util):
+
+![Klassendiagramm](docs/klassendiagramm.png)
+
+**Datenbankmodell** (MySQL, Zuordnungstabellen für n:m-Beziehungen):
+
+![ER-Diagramm](docs/er-diagramm.png)
+
+**Navigation nach dem Login** (Weiterleitung je nach Benutzerrolle):
+
+![Zustandsdiagramm der Navigation](docs/navigation-zustandsdiagramm.png)
+
+**Wireframes der Seiten:**
+
+![Wireframes](docs/wireframes.png)
 
 ## Starten mit Docker (empfohlen)
 
