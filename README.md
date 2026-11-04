@@ -82,9 +82,6 @@ cd test-management-webapp-jakarta-ee
 ```bash
 # Windows (PowerShell)
 copy .env.example .env
-
-# macOS / Linux
-cp .env.example .env
 ```
 
 Danach die Datei `.env` in einem Texteditor öffnen und die drei Passwörter durch eigene ersetzen
@@ -97,8 +94,7 @@ anderen Zeilen bleiben unverändert.
 docker compose up --build
 ```
 
-Der erste Start dauert einige Minuten, weil die Anwendung gebaut wird. Sobald das Terminal
-ruhig bleibt, ist die Anwendung bereit.
+Der erste Start kann einige Minuten dauren.
 
 **4. Anmelden:** Im Browser <http://localhost:8080/login.xhtml> öffnen. Als Benutzername zum
 Beispiel `Admin` eingeben. Das Passwort ist der Wert von `APP_SEED_PASSWORD` aus der Datei `.env`.
