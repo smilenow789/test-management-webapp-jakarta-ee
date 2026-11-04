@@ -1,0 +1,97 @@
+# Require4Testing – Testmanagement-Webanwendung (Jakarta EE)
+
+Mehrbenutzer-Webanwendung zur Verwaltung von **Anforderungen, Testfällen und Testläufen**.
+Jede Rolle sieht nur ihre eigene Oberfläche: Anforderungen erfassen, Testfälle ableiten,
+Testläufe zusammenstellen und Testern zuweisen, Ergebnisse eintragen.
+
+Entstanden als Studienprojekt (Java EE / CDI, 3. Semester), danach um Passwort-Hashing,
+Konfiguration per Umgebungsvariablen, Docker und CI ergänzt.
+
+## Technik
+
+| Schicht | Technologie |
+|---|---|
+| Präsentation | JSF (Mojarra), PrimeFaces, XHTML |
+| Logik | CDI (Weld), Controller → Service → Repository |
+| Persistenz | JPA / Hibernate, **MySQL 8** |
+| Laufzeit | Tomcat 10.1, Java 17 |
+| Tests / Build | JUnit 5, Maven, GitHub Actions, Docker Compose |
+
+## Rollen
+
+| Rolle | Aufgabe |
+|---|---|
+| Requirements Engineer | Anforderungen anlegen |
+| Testfallersteller | Testfälle zu einer Anforderung erstellen |
+| Testmanager | Testfälle zu Testläufen bündeln, Tester zuweisen |
+| Tester | zugewiesene Testfälle ausführen, Ergebnis speichern |
+
+Der Zugriff auf die Seiten wird über einen Servlet-Filter (`AuthenticationFilterController`)
+geschützt; ohne Login wird auf `login.xhtml` umgeleitet.
+
+## Datenmodell
+
+```mermaid
+erDiagram
+    ANFORDERUNG ||--o{ TESTFALL : "wird erfüllt durch"
+    TESTFALL }o--o{ BENUTZER : "zugewiesen an"
+    TESTLAUF }o--o{ TESTFALL : "enthält"
+    ANFORDERUNG { int ID string anforderungstitel string beschreibung }
+    TESTFALL { int ID string testfallTitel string beschreibung string ergebnis }
+    TESTLAUF { int ID string testlaufTitel string beschreibung }
+    BENUTZER { int ID string name string passwort string rolle }
+```
+
+## Starten mit Docker (empfohlen)
+
+```bash
+cp .env.example .env      # Werte anpassen
+docker compose up --build
+```
+
+Danach: <http://localhost:8080/login.xhtml>. Beim ersten Start werden in der leeren Datenbank
+sieben Demo-Benutzer angelegt (`Admin`, `NameTestmanager`, `Nametester`, …). Ihr gemeinsames
+Passwort ist der Wert von `APP_SEED_PASSWORD` aus `.env`.
+
+## Starten ohne Docker
+
+Voraussetzungen: JDK 17, Maven, Tomcat 10.1, MySQL 8.
+
+```powershell
+# Umgebungsvariablen für die Datenbank setzen (Defaults siehe EntityManagerProducer)
+$env:DB_URL = "jdbc:mysql://localhost:3306/fallstudiedb"
+$env:DB_USER = "fallstudie"
+$env:DB_PASSWORD = "..."
+$env:APP_SEED_PASSWORD = "..."
+.\scripts\deploy-war-tomcat.ps1 -TomcatHome "C:\tools\apache-tomcat-10.1.36"
+```
+
+## Sicherheit
+
+- Passwörter werden mit **PBKDF2-HMAC-SHA256** (210 000 Iterationen, zufälliges Salt) gespeichert,
+  siehe `util/PasswordHasher`. Ältere Klartext-Einträge werden beim ersten erfolgreichen Login
+  automatisch auf einen Hash umgestellt.
+- Datenbank-Zugangsdaten und Startpasswort stehen nicht im Code, sondern in Umgebungsvariablen.
+- SQL-Zugriffe laufen über JPA mit Parametern (keine String-Konkatenation).
+- Bekannte Einschränkung: Das Demo-Setup hat keine Registrierung und keine Passwort-Änderung.
+
+## Tests
+
+```bash
+mvn test
+```
+
+Bisher getestet: Passwort-Hashing (`PasswordHasherTest`). Bei jedem Push läuft der Build
+zusätzlich in GitHub Actions (`.github/workflows/ci.yml`).
+
+## Projektstruktur
+
+```
+src/main/java/
+  controller/   JSF-Backing-Beans und Login-Filter
+  service/      Geschäftslogik
+  repository/   JPA-Zugriffe
+  model/        Entitäten
+  util/         EntityManager-Producer, Session-Bean, PasswordHasher
+src/main/webapp/  XHTML-Seiten, CSS
+```

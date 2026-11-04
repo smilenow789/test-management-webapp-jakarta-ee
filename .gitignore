@@ -1,0 +1,12 @@
+# Build
+target/
+# IDEs
+.idea/
+.settings/
+.classpath
+.project
+.metadata/
+*.iml
+.vscode/
+# Lokale Konfiguration (Zugangsdaten nie committen)
+.env

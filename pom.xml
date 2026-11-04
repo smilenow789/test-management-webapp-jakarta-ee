@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>Fallstudie</groupId>
+  <artifactId>Fallstudie_IU</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>Fallstudie_IU Maven Webapp</name>
+  <url>https://github.com/smilenow789/require4testing-jakarta-ee</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <jakartaee-api.version>10.0.0</jakartaee-api.version>
+    <mojarra.version>4.0.0-M1</mojarra.version>
+    <weld.version>4.0.2.Final</weld.version>
+    <primefaces.version>14.0.0</primefaces.version>
+    <hibernate.version>6.4.4.Final</hibernate.version>
+    <mysql.connector.version>8.0.33</mysql.connector.version>
+    <junit.version>5.10.0</junit.version>
+  </properties>
+
+  <dependencies>
+    <!-- Jakarta EE Web API: Stellt alle Jakarta-EE-Standardschnittstellen bereit. -->
+    <dependency>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-web-api</artifactId>
+      <version>${jakartaee-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+   	<!-- JSF Implementierung -->
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>jakarta.faces</artifactId>
+      <version>${mojarra.version}</version>
+      <scope>compile</scope>
+    </dependency>
+	<!-- CDI Implementierung -->
+    <dependency>
+      <groupId>org.jboss.weld.servlet</groupId>
+      <artifactId>weld-servlet-shaded</artifactId>
+      <version>${weld.version}</version>
+     </dependency>
+	<!-- Hibernate Core für Object-Relational Mapping -->
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    <!-- MySQL zur Datenbankanbindung -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>${mysql.connector.version}</version>
+    </dependency>
+	<!-- PrimeFaces -->
+    <dependency>
+      <groupId>org.primefaces</groupId>
+      <artifactId>primefaces</artifactId>
+      <version>${primefaces.version}</version>
+      <classifier>jakarta</classifier>
+    </dependency>
+	<!-- OWASP Sicherheit (XSS-Schutz) -->
+    <dependency>
+        <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+        <artifactId>owasp-java-html-sanitizer</artifactId>
+        <version>20240325.1</version>
+    </dependency>
+	<!-- JUnit Jupiter API für Unit Tests -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+	<!-- JUnit Jupiter Engine zum Ausführen der Tests -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <finalName>Fallstudie_IU</finalName>
+  </build>
+</project>

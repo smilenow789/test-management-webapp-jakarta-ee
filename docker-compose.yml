@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?in .env setzen}
+      MYSQL_DATABASE: ${DB_NAME:-fallstudiedb}
+      MYSQL_USER: ${DB_USER:-fallstudie}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?in .env setzen}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:mysql://db:3306/${DB_NAME:-fallstudiedb}
+      DB_USER: ${DB_USER:-fallstudie}
+      DB_PASSWORD: ${DB_PASSWORD}
+      APP_SEED_PASSWORD: ${APP_SEED_PASSWORD:?in .env setzen}
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:
