@@ -1,11 +1,11 @@
-# Require4Testing – Testmanagement-Webanwendung (Jakarta EE)
+# Testmanagement-Webanwendung für Anforderungen, Testfälle und Testläufe (Jakarta EE)
 
 Mehrbenutzer-Webanwendung zur Verwaltung von **Anforderungen, Testfällen und Testläufen**.
 Jede Rolle sieht nur ihre eigene Oberfläche: Anforderungen erfassen, Testfälle ableiten,
 Testläufe zusammenstellen und Testern zuweisen, Ergebnisse eintragen.
 
-Entstanden als Studienprojekt (Java EE / CDI, 3. Semester), danach um Passwort-Hashing,
-Konfiguration per Umgebungsvariablen, Docker und CI ergänzt.
+Entstanden als Studienprojekt (Java EE / CDI, 3. Semester, Arbeitstitel *Require4Testing*), danach
+um Konfiguration per Umgebungsvariablen und Docker ergänzt.
 
 ## Technik
 
@@ -15,7 +15,7 @@ Konfiguration per Umgebungsvariablen, Docker und CI ergänzt.
 | Logik | CDI (Weld), Controller → Service → Repository |
 | Persistenz | JPA / Hibernate, **MySQL 8** |
 | Laufzeit | Tomcat 10.1, Java 17 |
-| Tests / Build | JUnit 5, Maven, GitHub Actions, Docker Compose |
+| Build / Betrieb | Maven, Docker Compose |
 
 ## Rollen
 
@@ -25,9 +25,6 @@ Konfiguration per Umgebungsvariablen, Docker und CI ergänzt.
 | Testfallersteller | Testfälle zu einer Anforderung erstellen |
 | Testmanager | Testfälle zu Testläufen bündeln, Tester zuweisen |
 | Tester | zugewiesene Testfälle ausführen, Ergebnis speichern |
-
-Der Zugriff auf die Seiten wird über einen Servlet-Filter (`AuthenticationFilterController`)
-geschützt; ohne Login wird auf `login.xhtml` umgeleitet.
 
 ## Entwurf und Datenmodell
 
@@ -71,24 +68,6 @@ $env:APP_SEED_PASSWORD = "..."
 .\scripts\deploy-war-tomcat.ps1 -TomcatHome "C:\tools\apache-tomcat-10.1.36"
 ```
 
-## Sicherheit
-
-- Passwörter werden mit **PBKDF2-HMAC-SHA256** (210 000 Iterationen, zufälliges Salt) gespeichert,
-  siehe `util/PasswordHasher`. Ältere Klartext-Einträge werden beim ersten erfolgreichen Login
-  automatisch auf einen Hash umgestellt.
-- Datenbank-Zugangsdaten und Startpasswort stehen nicht im Code, sondern in Umgebungsvariablen.
-- SQL-Zugriffe laufen über JPA mit Parametern (keine String-Konkatenation).
-- Bekannte Einschränkung: Das Demo-Setup hat keine Registrierung und keine Passwort-Änderung.
-
-## Tests
-
-```bash
-mvn test
-```
-
-Bisher getestet: Passwort-Hashing (`PasswordHasherTest`). Bei jedem Push läuft der Build
-zusätzlich in GitHub Actions (`.github/workflows/ci.yml`).
-
 ## Projektstruktur
 
 ```
@@ -97,6 +76,6 @@ src/main/java/
   service/      Geschäftslogik
   repository/   JPA-Zugriffe
   model/        Entitäten
-  util/         EntityManager-Producer, Session-Bean, PasswordHasher
+  util/         EntityManager-Producer, Session-Bean
 src/main/webapp/  XHTML-Seiten, CSS
 ```
