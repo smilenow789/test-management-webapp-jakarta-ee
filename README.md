@@ -66,7 +66,7 @@ angemeldete Person wird in einer sitzungsbezogenen Bean gehalten.
 
 ![Wireframes](docs/wireframes.png)
 
-## Starten mit Docker (empfohlen)
+## Starten mit Docker
 
 ```bash
 cp .env.example .env      # Werte anpassen
@@ -77,18 +77,6 @@ Danach: <http://localhost:8080/login.xhtml>. Beim ersten Start werden in der lee
 sieben Demo-Benutzer angelegt (`Admin`, `NameTestmanager`, `Nametester`, …). Ihr gemeinsames
 Passwort ist der Wert von `APP_SEED_PASSWORD` aus `.env`.
 
-## Starten ohne Docker
-
-Voraussetzungen: JDK 17, Maven, Tomcat 10.1, MySQL 8.
-
-```powershell
-# Umgebungsvariablen für die Datenbank setzen (Defaults siehe EntityManagerProducer)
-$env:DB_URL = "jdbc:mysql://localhost:3306/fallstudiedb"
-$env:DB_USER = "fallstudie"
-$env:DB_PASSWORD = "..."
-$env:APP_SEED_PASSWORD = "..."
-.\scripts\deploy-war-tomcat.ps1 -TomcatHome "C:\tools\apache-tomcat-10.1.36"
-```
 
 ## Projektstruktur
 
@@ -101,10 +89,3 @@ src/main/java/
   util/         EntityManager-Producer, Session-Bean
 src/main/webapp/  XHTML-Seiten, CSS
 ```
-
-## Ausblick
-
-- Pro Zuweisung eine eigene Testfall-Instanz, damit Ergebnisse verschiedener Testläufe
-  unabhängig voneinander bleiben
-- Gemeinsame Bestandteile der Seiten (zum Beispiel der Logout-Button) in Templates auslagern
-- Registrierung neuer Benutzer und Passwortänderung
